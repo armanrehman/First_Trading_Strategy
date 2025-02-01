@@ -1,0 +1,2 @@
+# First_Trading_Strategy
+ This project implements a simple stock trading strategy using moving averages (MA10 and MA50) to make buy/sell decisions. It reads stock data from a CSV file, calculates profits based on the strategy, and tracks cumulative wealth over time. The results are visualized with three plots showing the stock price, profit/loss, and cumulative wealth. The user can specify a date range to analyze.
