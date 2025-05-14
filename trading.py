@@ -10,17 +10,20 @@ stock_data = pd.read_csv(file_path)
 stock_data['Date'] = pd.to_datetime(stock_data['Date'], format='%d/%m/%Y')
 stock_data.set_index('Date', inplace=True)
 
+# Filter the data between the selected dates
 start_date = pd.to_datetime(start_date, format='%d/%m/%Y')
 end_date = pd.to_datetime(end_date, format='%d/%m/%Y')
 stock_data = stock_data.loc[start_date:end_date]
 
+# Calculating 10-day and 50-day moving averages of the closing price
 stock_data['MA10'] = stock_data['Close'].rolling(10).mean()
 stock_data['MA50'] = stock_data['Close'].rolling(50).mean()
-
 stock_data = stock_data.dropna()
 
+# If MA10 > MA50, buy signal (1), else no trade (0)
 stock_data['Shares'] = [1 if stock_data.loc[x, 'MA10'] > stock_data.loc[x, 'MA50'] else 0 for x in stock_data.index]
 
+# shifted column to represent next day's closing price
 stock_data['Close1'] = stock_data['Close'].shift(-1)
 
 stock_data['Profit'] = [
@@ -29,11 +32,9 @@ stock_data['Profit'] = [
 ]
 
 stock_data = stock_data.dropna()
-
 stock_data['Wealth'] = stock_data['Profit'].cumsum()
 
 fig, axes = plt.subplots(3, 1, figsize=(10, 12))
-
 axes[0].plot(stock_data['MA10'], label='MA10')
 axes[0].plot(stock_data['MA50'], label='MA50')
 axes[0].plot(stock_data['Close'], label='Close')
